@@ -3,10 +3,12 @@
 
 // Write your JavaScript code.
 
-async function deleteData(url = '') {
+async function deleteRequest(url = '') {
     const token = document.querySelector('input[name="__RequestVerificationToken"]');
+    const fullUrl = window.location.href + url;
+    console.log(fullUrl);
 
-    const response = await fetch(url, {
+    const response = await fetch(fullUrl, {
         method: 'DELETE',
         mode: 'cors',
         cache: 'no-cache',
@@ -17,7 +19,7 @@ async function deleteData(url = '') {
         },
         redirect: 'manual',
         referrerPolicy: 'no-referrer',
-    }).then(function() {
+    }).then(function () {
         document.location.reload(true);
     })
 }

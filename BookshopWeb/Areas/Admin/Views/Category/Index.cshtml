@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Category>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Categories";
 }
 
 @Html.AntiForgeryToken()
@@ -50,7 +50,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <a onclick="deleteData('/category/delete/@category.Id')" class="btn btn-danger">Delete</a>
+                                                <a onclick="deleteRequest('/Delete/@category.Id')" class="btn btn-danger">Delete</a>
                                             </div>
                                         </div>
                                     </div>

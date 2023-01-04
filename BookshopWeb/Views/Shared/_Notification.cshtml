@@ -6,20 +6,30 @@
     </div>
     <script type="text/javascript">
         setTimeout(function() {
-            bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
+            const alert = bootstrap.Alert.getOrCreateInstance(document.querySelector('.alert'));
+            try {
+                alert.close();
+            } catch(error) {
+                //
+            }
         }, 3000)
     </script>
 }
 
 @if (TempData["error"] != null)
 {
-    <div class="alert alert-error alert-dismissible fade show position-absolute" style="top: 50px; right: 10px; z-index: 2;" role="alert">
+    <div class="alert alert-danger alert-dismissible fade show position-absolute" style="top: 50px; right: 10px; z-index: 2;" role="alert">
         <strong>Error!</strong> @TempData["error"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
     <script type="text/javascript">
         setTimeout(function() {
-            bootstrap.Alert.getOrCreateInstance(document.querySelector(".alert")).close();
+            const alert = bootstrap.Alert.getOrCreateInstance(document.querySelector('.alert'));
+            try {
+                alert.close();
+            } catch(error) {
+                //
+            }
         }, 3000)
     </script>
 }
