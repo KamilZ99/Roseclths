@@ -4,6 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
+@Html.AntiForgeryToken()
+
 <div class="container p-3">
     <div class="row py-4">
         <div class="col-6">
@@ -22,7 +24,7 @@
                     <tr>
                         <th>Category Name</th>
                         <th>Display Order</th>
-                        <th></th>
+                        <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -31,26 +33,24 @@
                         <tr>
                             <td width="50%" class="align-middle">@category.Name</td>
                             <td width="30%" class="align-middle">@category.DisplayOrder</td>
-                            <td>
+                            <td class="text-center">
                                 <div class="btn-group" role="group">
                                     <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-warning ms-1" title="Edit"><i class="bi bi-pencil-square"></i></a>
-                                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-@category.Id"><i class="bi bi-trash-fill"></i></a>
-
-                                    <div class="modal fade" id="exampleModal-@category.Id" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Delete category</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure you want to remove @category.Name?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                    <a onclick="deleteData('/category/delete/@category.Id')" class="btn btn-danger">Delete</a>
-                                                    @Html.AntiForgeryToken()
-                                                </div>
+                                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-@category.Id" title="Delete"><i class="bi bi-trash-fill"></i></a>
+                                </div>
+                                <div class="modal fade" id="exampleModal-@category.Id" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Delete category</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-start">
+                                                Are you sure you want to remove @category.Name?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <a onclick="deleteData('/category/delete/@category.Id')" class="btn btn-danger">Delete</a>
                                             </div>
                                         </div>
                                     </div>

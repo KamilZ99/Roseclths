@@ -15,37 +15,9 @@ async function deleteData(url = '') {
             'Content-Type': 'application/json',
             'RequestVerificationToken': token.value
         },
-        redirect: 'follow',
+        redirect: 'manual',
         referrerPolicy: 'no-referrer',
-    });
-
-    if (response.ok) {
+    }).then(function() {
         document.location.reload(true);
-    } else {
-        const alert = makeAlert('danger', `<strong>Error!</strong> An unexpected error occurred while deleting a category.`)
-        const container = document.querySelector('.container');
-        console.log(alert);
-        container.prepend(alert);
-    }
-}
-
-function makeAlert(style, alertText) {
-    let alertDiv = document.createElement('div');
-    alertDiv.classList.add('alert', `alert-${style}`, 'alert-dismissible', 'fade', 'show');
-    alertDiv.setAttribute('role', 'alert');
-
-    let alertCloseBtn = document.createElement('button');
-    alertCloseBtn.type = 'button';
-    alertCloseBtn.classList.add('btn-close');
-    alertCloseBtn.setAttribute('data-bs-dismiss', 'alert');
-    alertCloseBtn.setAttribute('aria-label', 'Close');
-
-    let cross = document.createElement('span');
-    cross.setAttribute('aria-hidden', 'true');
-
-    alertDiv.innerHTML = alertText;
-    alertCloseBtn.appendChild(cross);
-    alertDiv.appendChild(alertCloseBtn);
-
-    return alertDiv;
+    })
 }

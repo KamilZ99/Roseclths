@@ -1,9 +1,8 @@
-﻿using BookshopWeb.Data;
-using BookshopWeb.Models;
+﻿using Bookshop.DataAccess.Data;
+using Bookshop.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace BookshopWeb.Controllers
+namespace Bookshop.Controllers
 {
     public class CategoryController : Controller
     {
@@ -33,6 +32,7 @@ namespace BookshopWeb.Controllers
             {
                 _context.Categories.Add(category);
                 _context.SaveChanges();
+                TempData["success"] = "Category created successfully.";
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -59,6 +59,7 @@ namespace BookshopWeb.Controllers
             {
                 _context.Categories.Update(category);
                 _context.SaveChanges();
+                TempData["success"] = "Category updated successfully.";
                 return RedirectToAction("Index");
             }
             return View(category);
@@ -68,17 +69,24 @@ namespace BookshopWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int? id)
         {
-            if(id is null || id == 0)
-                return NotFound("Invalid id number.");
+            if (id is null || id == 0)
+            {
+                TempData["error"] = "XDXDXDXDXDXD";
+                return RedirectToAction("Index");
+            }
 
             var category = _context.Categories.Find(id);
 
             if (category == null)
-                return NotFound($"Cannot delete category with id: {id}");
+            {
+                TempData["error"] = "jhglkfdhjgklfdshjlk";
+                return RedirectToAction("Index");
+            }
             
             _context.Categories.Remove(category);
             _context.SaveChanges();
-            return Ok();
+            TempData["success"] = "Category deleted successfully.";
+            return RedirectToAction("Index");
         }
     }
 }
