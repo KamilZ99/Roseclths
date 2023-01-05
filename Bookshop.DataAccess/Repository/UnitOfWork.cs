@@ -17,10 +17,12 @@ namespace Bookshop.DataAccess.Repository
             _context = context;
             CategoryRepository = new CategoryRepository(_context);
             CoverTypeRepository = new CoverTypeRepository(_context);
+            BookRepository = new BookRepository(_context);
         }
 
         public ICategoryRepository CategoryRepository { get; }
         public ICoverTypeRepository CoverTypeRepository { get; }
+        public IBookRepository BookRepository { get; }
 
         public void Save()
         {
