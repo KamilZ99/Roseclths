@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
@@ -31,19 +32,20 @@ namespace Bookshop.Models
         [Range(1, 10000)]
         public double Price { get; set; }
 
-        [Required]
+        [ValidateNever]
         public string ImageUrl { get; set; }
 
 
         [Required]
         public int CategoryId { get; set; }
-
+        [ValidateNever]
         public Category Category { get; set; }
 
 
         [Required]
         public int CoverTypeId { get; set; }
 
+        [ValidateNever]
         [DisplayName("Cover Type")]
         public CoverType CoverType { get; set; }
     }

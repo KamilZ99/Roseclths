@@ -17,19 +17,24 @@
 
     <div class="row">
         <div class="col-12">
-            <table class="table table-default table-bordered table-hover">
+            <table id="dataTable" class="table table-default table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>Title</th>
                         <th>ISBN</th>
                         <th>Author</th>
                         <th>List Price</th>
-                        <th>Category</th>
+                        @*<th>Category</th>
                         <th>Cover Type</th>
-                        <th class="text-center">Action</th>
+                        <th class="text-center">Action</th>*@
                     </tr>
                 </thead>
             </table>
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    <script src="~/js/book.js"></script>
+}
