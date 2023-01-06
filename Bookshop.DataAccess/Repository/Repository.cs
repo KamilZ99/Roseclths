@@ -16,18 +16,28 @@ namespace Bookshop.DataAccess.Repository
             dbSet = _context.Set<T>();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
+
+            if (includeProperties != null)
+            {
+                var properties = includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                foreach ( var property in properties)
+                {
+                    query = query.Include(property);
+                }
+            }
+
             return query;
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>> filter)
+        public T? GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
 
             query = query.Where(filter);
-
+            
             return query.FirstOrDefault();
         }
 

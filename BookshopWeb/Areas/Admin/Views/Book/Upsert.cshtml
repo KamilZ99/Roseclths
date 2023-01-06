@@ -14,6 +14,8 @@
 
             <div class="row justify-content-center mb-4">
                 <div class="col-8">
+                    <input hidden type="hidden" asp-for="Book.Id" />
+                    <input hidden type="hidden" asp-for="Book.ImageUrl" />
                     <label asp-for="Book.Title"></label>
                     <input asp-for="Book.Title" class="form-control" />
                     <span asp-validation-for="Book.Title" class="text-danger"></span>
@@ -44,8 +46,13 @@
                 </div>
                 <div class="col-4">
                     <label asp-for="Book.ImageUrl"></label>
-                    <input type="file" name="file" id="file" accept="image/*" class="form-control" onchange="preview()" />
-                    <div id="imagePreview"></div>
+                    <input type="file" asp-for="Book.Image" id="file" accept="image/*" class="form-control" onchange="preview()" />
+                    <div id="imagePreview" class="mt-4">
+                        @if(Model.Book.ImageUrl != null)
+                        {
+                            <img width="100%" src="@Model.Book.ImageUrl" alt="book cover" />
+                        }
+                    </div>
                 </div>
             </div>
             <div class="row justify-content-center mb-4">
@@ -121,22 +128,31 @@
 
             const filePath = fileInput.value;
 
+            if (filePath == '') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Please upload an image of your book cover.',
+                });
+                document.getElementById('imagePreview').innerHTML = '';
+                return false;
+            }
+
             const allowedExtensions = /(\.tiff|\.jfif|\.bmp|\.pjp|\.apng|\.gif|\.svg|\.png|\.xbm|\.dib|\.jxl|\.jpeg|\.svgz|\.jpg|\.webp|\.ico|\.tif|\.pjpeg|\.avif)$/i;
 
             if (allowedExtensions.exec(filePath) && fileInput.files && fileInput.files[0]) {
                 
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                    document.getElementById(
-                        'imagePreview').innerHTML =
-                        '<img width="100%" height="100%" src="' + e.target.result
-                        + '"/>';
+                    document.getElementById('imagePreview').innerHTML =
+                        '<img width="100%" src="' + e.target.result + '" alt="book cover" />';
                 };
 
                 reader.readAsDataURL(fileInput.files[0]);
                 return true;
             } else {
                 fileInput.value = '';
+                document.getElementById('imagePreview').innerHTML = '';
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',

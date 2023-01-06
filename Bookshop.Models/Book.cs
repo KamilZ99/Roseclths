@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 
 #nullable disable
@@ -34,15 +36,19 @@ namespace Bookshop.Models
 
         [ValidateNever]
         public string ImageUrl { get; set; }
-
+        [NotMapped]
+        [ValidateNever]
+        public IFormFile Image { get; set; }
 
         [Required]
+        [DisplayName("Category")]
         public int CategoryId { get; set; }
         [ValidateNever]
         public Category Category { get; set; }
 
 
         [Required]
+        [DisplayName("Cover Type")]
         public int CoverTypeId { get; set; }
 
         [ValidateNever]
