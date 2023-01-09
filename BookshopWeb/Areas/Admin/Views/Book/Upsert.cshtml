@@ -25,7 +25,7 @@
             <div class="row justify-content-center mb-4">
                 <div class="col-8">
                     <label asp-for="Book.Description"></label>
-                    <textarea asp-for="Book.Description" class="form-control" rows="5"></textarea>
+                    <textarea class="form-control" asp-for="Book.Description" rows="5"></textarea>
                     <span asp-validation-for="Book.Description" class="text-danger"></span>
                 </div>
             </div>
@@ -105,7 +105,6 @@
         <partial name="_ValidationScriptsPartial" />
     }
     <script type="text/javascript">
-
         function validateInput() {
 
             const fileInput = document.getElementById('file');

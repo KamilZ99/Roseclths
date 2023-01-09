@@ -1,0 +1,47 @@
+﻿@model ShoppingCart
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<form method="post">
+    <div class="card h-100 mt-4">
+        <div class="card-body bg-black border-0">
+            <div class="row">
+                <div class="col-6 text-center">
+                    <img class="book-image img-fluid rounded-1" style="object-fit: contain; object-position: bottom; height: 70vh;" src="@Model.Book.ImageUrl" alt="Book cover image" />
+                </div>
+
+                <div class="col-6">
+                    <h1 class="display-6 text-warning">@Model.Book.Title</h1>
+                    <p class="fs-4">by @Model.Book.Author</p>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="btn btn-primary">Fantasy</div>
+                            <div class="btn btn-warning">Softcover</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <span>ISBN: @Model.Book.ISBN</span>
+                        </div>
+                    </div>
+                    <div class="description mt-2">
+                        <p class="fs-5">@Model.Book.Description</p>
+                    </div>
+                    <div class="pricing">
+                        <p class="card-subtitle fs-5">List price: <strike class="text-danger"><b>@Model.Book.ListPrice.ToString("c")</b></strike></p>
+                        <p class="card-subtitle fs-5">Current price: <b>@Model.Book.Price.ToString("c")</b></p>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col-12 text-center">
+                            <button class="btn btn-lg btn-success mx-2 rounded-0">Add to cart</button>
+                            <a asp-action="Index" class="btn btn-lg btn-white mx-2 rounded-0">Back to list</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</form>

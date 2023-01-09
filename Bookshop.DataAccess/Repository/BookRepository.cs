@@ -29,6 +29,9 @@ namespace Bookshop.DataAccess.Repository
 
             if(book.ImageUrl is not null)
                 bookDB.ImageUrl = book.ImageUrl;
+
+            bookDB.CategoryId = book.CategoryId;
+            bookDB.CoverTypeId = book.CoverTypeId;
         }
     }
 }

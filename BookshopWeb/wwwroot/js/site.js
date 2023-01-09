@@ -6,7 +6,6 @@
 async function deleteRequest(url = '') {
     const token = document.querySelector('input[name="__RequestVerificationToken"]');
     const fullUrl = window.location.href + url;
-    console.log(fullUrl);
 
     const response = await fetch(fullUrl, {
         method: 'DELETE',
