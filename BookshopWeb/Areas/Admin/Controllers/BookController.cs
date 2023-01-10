@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BookshopWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class BookController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -1,11 +1,13 @@
 ﻿using Bookshop.DataAccess.Repository.Interfaces;
 using Bookshop.Models;
 using Bookshop.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace BookshopWeb.Areas.Customer.Controllers
 {
+    [Area("Customer")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -24,9 +26,14 @@ namespace BookshopWeb.Areas.Customer.Controllers
             return View(productList);
         }
 
-        public IActionResult Details(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public IActionResult Details(ShoppingCart cart)
         {
-            var book = _unitOfWork.BookRepository.GetFirstOrDefault(b => b.Id == id);
+            var claimsIdentity = User.Identity;
+
+            var book = _unitOfWork.BookRepository.GetFirstOrDefault(b => b.Id == cart.BookId);
 
             if (book == null)
             {
@@ -34,7 +41,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
                 return RedirectToAction("Index");
             }
 
-            var shoppingCart = new ShoppingCart() { Book = book, Count = 1 };
+            var shoppingCart = new ShoppingCart() { BookId = cart.BookId, Book = book, Count = 1 };
 
             return View(shoppingCart);
         }

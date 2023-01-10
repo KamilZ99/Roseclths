@@ -15,7 +15,7 @@
                     <p class="card-title text-white">by <b>@book.Author</b></p>
                 </div>
 
-                <a asp-action="Details" asp-route-id="@book.Id" class="details-link mt-auto link-primary text-center text-decoration-none">
+                <a asp-action="Details" asp-route-id="@book.Id" class="details-link mt-auto link-dark text-center text-decoration-none">
                     <div class="card-footer bg-transparent">
                         <p class="card-subtitle">List price - <strike><b>@book.ListPrice.ToString("c")</b></strike></p>
                         <p class="card-subtitle">Current price - <b>@book.Price.ToString("c")</b></p>
