@@ -1,44 +1,58 @@
-html {
-    font-size: 14px;
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: 60px;
-}
-
-/*.book-image:hover {
-    opacity: 0.6;
-}*/
-
 .details-link {
-    background-color: white;
+    background-color: black;
+    -moz-transition: all 400ms;
+    -o-transition: all 400ms;
+    -webkit-transition: all 400ms;
+    transition: all 400ms;
 }
 
 .details-link:hover {
-    opacity: 0.9;
+    opacity: 0.8;
+    -moz-transition: all 400ms;
+    -o-transition: all 400ms;
+    -webkit-transition: all 400ms;
+    transition: all 400ms;
+}
+
+.footer-icon {
+    -moz-transition: all 400ms;
+    -o-transition: all 400ms;
+    -webkit-transition: all 400ms;
+    transition: all 400ms;
+}
+
+.footer-icon:hover {
+    color: white;
+    -moz-transition: all 400ms;
+    -o-transition: all 400ms;
+    -webkit-transition: all 400ms;
+    transition: all 400ms;
 }
 
 .btn-white {
     color: black;
     background-color: white;
+    border-color: black;
+    letter-spacing: 0.05em;
 }
 
-.btn-white:hover {
+.btn-white:hover,
+.btn-white:active,
+.btn-white:focus,
+.btn-white.active {
+    background: #DDD;
     color: black;
-    background-color: #DDD;
+    border-color: black;
+}
+
+.book-image {
+    transition: all 400ms;
+}
+
+.book-image:hover {
+    opacity: 0.5;
+    -moz-transition: all 400ms;
+    -o-transition: all 400ms;
+    -webkit-transition: all 400ms;
+    transition: all 400ms;
 }

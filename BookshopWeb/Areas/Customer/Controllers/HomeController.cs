@@ -4,6 +4,7 @@ using Bookshop.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BookshopWeb.Areas.Customer.Controllers
 {
@@ -19,6 +20,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             IEnumerable<Book> productList = _unitOfWork.BookRepository.GetAll(includeProperties: "Category,CoverType");
@@ -26,24 +28,39 @@ namespace BookshopWeb.Areas.Customer.Controllers
             return View(productList);
         }
 
+        [HttpGet]
+        public IActionResult Details(int bookId)
+        {
+            var book = _unitOfWork.BookRepository.GetFirstOrDefault(b => b.Id == bookId);
+
+            if (book == null)
+            {
+                TempData["error"] = "Book was not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var shoppingCart = new ShoppingCart() { BookId = bookId, Book = book, Count = 1 };
+
+            return View(shoppingCart);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
         public IActionResult Details(ShoppingCart cart)
         {
-            var claimsIdentity = User.Identity;
+            var claims = User.Identity as ClaimsIdentity;
+            var claimsId = claims?.FindFirst(ClaimTypes.NameIdentifier);
 
-            var book = _unitOfWork.BookRepository.GetFirstOrDefault(b => b.Id == cart.BookId);
+            if(claimsId == null) { return Unauthorized(); }
 
-            if (book == null)
-            {
-                TempData["error"] = "An unexpected error occurred while trying to display the book.";
-                return RedirectToAction("Index");
-            }
+            cart.ApplicationUserId = claimsId.Value;
 
-            var shoppingCart = new ShoppingCart() { BookId = cart.BookId, Book = book, Count = 1 };
-
-            return View(shoppingCart);
+            _unitOfWork.ShoppingCartRepository.Add(cart);
+            _unitOfWork.Save();
+            TempData["success"] = "The book has been added to the cart";
+            
+            return RedirectToAction(nameof(Index));
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
