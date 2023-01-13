@@ -1,10 +1,5 @@
 ﻿using Bookshop.DataAccess.Data;
 using Bookshop.DataAccess.Repository.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bookshop.DataAccess.Repository
 {
@@ -21,6 +16,8 @@ namespace Bookshop.DataAccess.Repository
             CompanyRepository = new CompanyRepository(_context);
             ShoppingCartRepository = new ShoppingCartRepository(_context);
             ApplicationUserRepository = new ApplicationUserRepository(_context);
+            OrderHeaderRepository = new OrderHeaderRepository(_context);
+            OrderDetailsRepository = new OrderDetailsRepository(_context);
         }
 
         public ICategoryRepository CategoryRepository { get; }
@@ -29,10 +26,12 @@ namespace Bookshop.DataAccess.Repository
         public ICompanyRepository CompanyRepository { get; }
         public IShoppingCartRepository ShoppingCartRepository { get; set; }
         public IApplicationUserRepository ApplicationUserRepository { get; set; }
+        public IOrderHeaderRepository OrderHeaderRepository { get; set; }
+        public IOrderDetailsRepository OrderDetailsRepository { get; set; }
 
-        public void Save()
+        public async Task Save()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

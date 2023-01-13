@@ -4,6 +4,7 @@ namespace Bookshop.DataAccess.Repository.Interfaces
 {
     public interface IShoppingCartRepository : IRepository<ShoppingCart>
     {
-        void Update(ShoppingCart cart);
+        int IncrementCount(ShoppingCart cart, int count);
+        int DecrementCount(ShoppingCart cart, int count);
     }
 }

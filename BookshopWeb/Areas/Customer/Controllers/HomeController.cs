@@ -23,9 +23,9 @@ namespace BookshopWeb.Areas.Customer.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            IEnumerable<Book> productList = _unitOfWork.BookRepository.GetAll(includeProperties: "Category,CoverType");
+            IEnumerable<Book> booklist = _unitOfWork.BookRepository.GetAll("Category,CoverType");
 
-            return View(productList);
+            return View(booklist);
         }
 
         [HttpGet]
@@ -47,17 +47,24 @@ namespace BookshopWeb.Areas.Customer.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public IActionResult Details(ShoppingCart cart)
+        public async Task<IActionResult> Details(ShoppingCart cart)
         {
             var claims = User.Identity as ClaimsIdentity;
-            var claimsId = claims?.FindFirst(ClaimTypes.NameIdentifier);
+            var idClaim = claims?.FindFirst(ClaimTypes.NameIdentifier);
+            if(idClaim == null) { return Unauthorized(); }
+            cart.ApplicationUserId = idClaim.Value;
 
-            if(claimsId == null) { return Unauthorized(); }
+            var dbCart = _unitOfWork.ShoppingCartRepository.GetFirstOrDefault
+                (sc => sc.ApplicationUserId == idClaim.Value && sc.BookId == cart.BookId);
 
-            cart.ApplicationUserId = claimsId.Value;
-
-            _unitOfWork.ShoppingCartRepository.Add(cart);
-            _unitOfWork.Save();
+            if (dbCart == null)
+                _unitOfWork.ShoppingCartRepository.Add(cart);
+            
+            else
+                _unitOfWork.ShoppingCartRepository.IncrementCount(dbCart, cart.Count);
+            
+            
+            await _unitOfWork.Save();
             TempData["success"] = "The book has been added to the cart";
             
             return RedirectToAction(nameof(Index));

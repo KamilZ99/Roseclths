@@ -13,9 +13,16 @@ namespace Bookshop.DataAccess.Repository
             _context = context;
         }
 
-        public void Update(ShoppingCart cart)
+        public int IncrementCount(ShoppingCart cart, int count)
         {
-            _context.ShoppingCarts.Update(cart);
+            cart.Count += count;
+            return cart.Count;
+        }
+
+        public int DecrementCount(ShoppingCart cart, int count)
+        {
+            cart.Count -= count;
+            return cart.Count;
         }
     }
 }

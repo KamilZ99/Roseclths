@@ -38,7 +38,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Upsert(Company company)
+        public async Task<IActionResult> Upsert(Company company)
         {
             
             if(!ModelState.IsValid)
@@ -55,7 +55,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
                 TempData["success"] = "Company updated successfully.";
             }
 
-            _unitOfWork.Save();            
+            await _unitOfWork.Save();            
             
             return RedirectToAction("Index");
         }
@@ -72,7 +72,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
 
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id is null || id == 0)
             {
@@ -89,7 +89,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
             }
 
             _unitOfWork.CompanyRepository.Remove(company);
-            _unitOfWork.Save();
+            await _unitOfWork.Save();
             TempData["success"] = "Company deleted successfully.";
             return Ok();
         }

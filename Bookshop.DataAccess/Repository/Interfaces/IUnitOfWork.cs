@@ -14,6 +14,8 @@ namespace Bookshop.DataAccess.Repository.Interfaces
         ICompanyRepository CompanyRepository { get; }
         IShoppingCartRepository ShoppingCartRepository { get; }
         IApplicationUserRepository ApplicationUserRepository { get; }
-        void Save();
+        IOrderHeaderRepository OrderHeaderRepository { get; }
+        IOrderDetailsRepository OrderDetailsRepository { get; }
+        Task Save();
     }
 }

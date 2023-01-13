@@ -32,6 +32,24 @@ namespace Bookshop.DataAccess.Repository
             return query;
         }
 
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        {
+            IQueryable<T> query = dbSet;
+
+            query = query.Where(filter);
+
+            if (includeProperties != null)
+            {
+                var properties = includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                foreach ( var property in properties)
+                {
+                    query = query.Include(property);
+                }
+            }
+
+            return query;
+        }
+
         public T? GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
