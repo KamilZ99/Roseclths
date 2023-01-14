@@ -55,6 +55,15 @@ namespace Bookshop.DataAccess.Repository
             IQueryable<T> query = dbSet;
 
             query = query.Where(filter);
+
+            if (includeProperties != null)
+            {
+                var properties = includeProperties.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                foreach ( var property in properties)
+                {
+                    query = query.Include(property);
+                }
+            }
             
             return query.FirstOrDefault();
         }

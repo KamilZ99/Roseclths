@@ -29,6 +29,8 @@ namespace Bookshop.DataAccess.Repository
             
             if(paymentStatus != null)
                 dbOrder.PaymentStatus = paymentStatus;
+
+            _context.SaveChanges();
             
         }
 
@@ -39,6 +41,7 @@ namespace Bookshop.DataAccess.Repository
             if (dbOrder == null)
                 return;
             
+            dbOrder.PaymentDate = DateTime.Now;
             dbOrder.SessionId = sessionId;
             dbOrder.PaymentIntentId = paymentIntentId;
         }

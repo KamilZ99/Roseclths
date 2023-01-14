@@ -1,0 +1,14 @@
+﻿@model int
+
+<div class="row">
+    <div class="col-12">
+        <a asp-area="Admin" asp-controller="Order" asp-action="Details" asp-route-orderId="@Model" class="link-warning text-decoration-none"><i class="bi bi-arrow-left-circle me-2"></i> Go back</a>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h1 class="text-warning">Payment succesfull!</h1>
+        <p class="fs-4">Order number: <span class="text-success">@Model</span></p>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Orders";
+    var status = Context.Request.Query["status"];
+    var inprocess = "";
+    var pending = "";
+    var completed = "";
+    var approved = "";
+    var all = "";
+
+    switch (status)
+    {
+        case "inprocess":
+            inprocess = "active";
+            break;
+
+        case "pending":
+            pending = "active";
+            break;
+
+        case "completed":
+            completed = "active";
+            break;
+
+        case "approved":
+            approved = "active";
+            break;
+
+        case "all":
+            all = "active";
+            break;
+    }
+}
+
+@Html.AntiForgeryToken()
+
+
+<div class="d-flex justify-content-between mt-5">
+        <h2 class="display-6 text-white">Order List</h2>
+
+        <ul class="list-group list-group-horizontal-sm">
+            <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="inprocess">
+                <li class="list-group-item @inprocess">In Process</li>
+            </a>
+            <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="pending">
+                <li class="list-group-item @pending">Pending</li>
+            </a>
+            <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="completed">
+                <li class="list-group-item @completed">Completed</li>
+            </a>
+            <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="approved">
+                <li class="list-group-item @approved">Approved</li>
+            </a>
+            <a class="text-decoration-none" asp-controller="Order" asp-action="Index" asp-route-status="all">
+                <li class="list-group-item @all">All</li>
+            </a>
+        </ul>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <table id="dataTable" class="table table-default table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Order Status</th>
+                    <th>Order Total</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts
+    {
+    <script src="~/js/order.js"></script>
+}

@@ -145,7 +145,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
                     LineItems = new List<SessionLineItemOptions>(),
                     Mode = "payment",
                     SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCartViewModel.OrderHeader.Id}",
-                    CancelUrl = domain + $"customer/cart/index"
+                    CancelUrl = domain + $"customer/cart/index",
                 };
 
                 foreach (var cart in ShoppingCartViewModel.ListCart)
@@ -196,6 +196,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
 
                 if (session.PaymentStatus.ToLower() == "paid")
                 {
+                    _unitOfWork.OrderHeaderRepository.UpdateStripeIds(id, orderHeader.SessionId, session.PaymentIntentId);
                     _unitOfWork.OrderHeaderRepository.UpdateStatus(id, StaticDetails.STATUS_APPROVED, StaticDetails.PAYMENT_STATUS_APPROVED);
                     await _unitOfWork.Save();
                 }
