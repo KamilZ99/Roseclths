@@ -140,10 +140,10 @@ namespace BookshopWeb.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            if  (  !await _roleManager.RoleExistsAsync(StaticDetails.ROLE_ADMIN)
-                || !await _roleManager.RoleExistsAsync(StaticDetails.ROLE_EMPLOYEE)
-                || !await _roleManager.RoleExistsAsync(StaticDetails.ROLE_USER_INDIVIDUAL)
-                || !await _roleManager.RoleExistsAsync(StaticDetails.ROLE_USER_COMPANY))
+            if (  !await _roleManager.RoleExistsAsync(StaticDetails.ROLE_ADMIN)
+               || !await _roleManager.RoleExistsAsync(StaticDetails.ROLE_EMPLOYEE)
+               || !await _roleManager.RoleExistsAsync(StaticDetails.ROLE_USER_INDIVIDUAL)
+               || !await _roleManager.RoleExistsAsync(StaticDetails.ROLE_USER_COMPANY))
             {
                 await _roleManager.CreateAsync(new IdentityRole(StaticDetails.ROLE_ADMIN));
                 await _roleManager.CreateAsync(new IdentityRole(StaticDetails.ROLE_EMPLOYEE));

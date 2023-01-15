@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Bookshop.Utility;
 using Stripe;
+using Bookshop.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +33,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.AddSession();
@@ -73,5 +73,7 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.UseSession();
+
+await SeedData.EnsurePopulated(app);
 
 app.Run();
