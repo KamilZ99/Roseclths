@@ -204,6 +204,8 @@ namespace BookshopWeb.Areas.Customer.Controllers
 
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCartRepository.GetAll(sc => sc.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
 
+            HttpContext.Session.Clear();
+
             _unitOfWork.ShoppingCartRepository.RemoveRange(shoppingCarts);
             await _unitOfWork.Save();
 
@@ -215,6 +217,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
             var cart = _unitOfWork.ShoppingCartRepository.GetFirstOrDefault(sc => sc.Id == cartId);
             _unitOfWork.ShoppingCartRepository.IncrementCount(cart, 1);
             await _unitOfWork.Save();
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -232,6 +235,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
             }
 
             await _unitOfWork.Save();
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -240,6 +244,10 @@ namespace BookshopWeb.Areas.Customer.Controllers
             var cart = _unitOfWork.ShoppingCartRepository.GetFirstOrDefault(sc => sc.Id == cartId);
             _unitOfWork.ShoppingCartRepository.Remove(cart);
             await _unitOfWork.Save();
+
+            var count = _unitOfWork.ShoppingCartRepository.GetAll(sc => sc.ApplicationUserId == cart.ApplicationUserId).ToList().Count();
+            HttpContext.Session.SetInt32(StaticDetails.SESSION_CART, count);
+
             return RedirectToAction(nameof(Index));
         }
 

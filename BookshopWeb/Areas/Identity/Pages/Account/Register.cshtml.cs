@@ -220,8 +220,16 @@ namespace BookshopWeb.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        if(User.IsInRole(StaticDetails.ROLE_ADMIN))
+                        {
+                            TempData["success"] = "New user created successfully";
+                            return Page();
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                 }
                 foreach (var error in result.Errors)

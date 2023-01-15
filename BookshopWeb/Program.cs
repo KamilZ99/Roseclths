@@ -14,7 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"), builder => builder.MigrationsAssembly("Bookshop.DataAccess"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"),
+    builder => builder.MigrationsAssembly("Bookshop.DataAccess"));
 });
 
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
@@ -33,6 +34,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+builder.Services.AddSession();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -62,10 +65,13 @@ StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey"
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+
+app.UseSession();
 
 app.Run();

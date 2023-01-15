@@ -9,6 +9,8 @@ using Stripe.Checkout;
 using System.Diagnostics;
 using System.Security.Claims;
 
+#nullable disable
+
 namespace BookshopWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
