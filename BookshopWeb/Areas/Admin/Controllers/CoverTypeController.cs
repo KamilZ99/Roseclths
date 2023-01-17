@@ -30,12 +30,12 @@ namespace BookshopWeb.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CoverType coverType)
+        public IActionResult Create(CoverType coverType)
         {
             if (ModelState.IsValid)
             {
                 _unitOfWork.CoverTypeRepository.Add(coverType);
-                await _unitOfWork.Save();
+                _unitOfWork.Save();
                 TempData["success"] = "Cover type created successfully.";
                 return RedirectToAction("Index");
             }
@@ -57,12 +57,12 @@ namespace BookshopWeb.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CoverType coverType)
+        public IActionResult Edit(CoverType coverType)
         {
             if (ModelState.IsValid)
             {
                 _unitOfWork.CoverTypeRepository.Update(coverType);
-                await _unitOfWork.Save();
+                _unitOfWork.Save();
                 TempData["success"] = "Cover type updated successfully.";
                 return RedirectToAction("Index");
             }
@@ -71,7 +71,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
 
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id is null || id == 0)
             {
@@ -88,7 +88,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
             }
 
             _unitOfWork.CoverTypeRepository.Remove(coverType);
-            await _unitOfWork.Save();
+            _unitOfWork.Save();
             TempData["success"] = "Cover type deleted successfully.";
             return RedirectToAction("Index");
         }

@@ -7,6 +7,11 @@
 <form method="post">
     <input type="hidden" asp-for="BookId" />
     <input type="hidden" asp-for="Count" />
+    <div class="row">
+        <div class="col-12 mt-4">
+            <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="link-warning text-decoration-none"><i class="bi bi-arrow-left-circle me-2"></i> Go back</a>
+        </div>
+    </div>
 
     <div class="row mt-5">
         <div class="col-6">
@@ -18,8 +23,8 @@
             <p class="fs-4">by @Model.Book.Author</p>
                 
             <div class="col-12">
-                <div class="btn btn-primary">Fantasy</div>
-                <div class="btn btn-warning ms-2">Softcover</div>
+                <div class="btn btn-primary">@Model.Book.Category.Name</div>
+                <div class="btn btn-warning ms-2">@Model.Book.CoverType.Name</div>
             </div>
                 
             <div class="col-12 mt-4">
@@ -33,7 +38,6 @@
 
             <div class="col-12 mt-5 text-end">
                 <button class="btn btn-lg btn-success rounded-0 mx-1">Add to cart</button>
-                <a class="btn btn-lg btn-white rounded-0 mx-1" asp-action="Index">Back to list</a>
             </div>
         </div>
                 

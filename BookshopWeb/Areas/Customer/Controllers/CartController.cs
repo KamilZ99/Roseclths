@@ -83,7 +83,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
         [HttpPost]
         [ActionName("Summary")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PostSummary()
+        public IActionResult PostSummary()
         {
             var claims = User.Identity as ClaimsIdentity;
             var idClaim = claims?.FindFirst(ClaimTypes.NameIdentifier);
@@ -117,7 +117,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
             }
 
             _unitOfWork.OrderHeaderRepository.Add(ShoppingCartViewModel.OrderHeader);
-            await _unitOfWork.Save();
+            _unitOfWork.Save();
 
             foreach (var cart in ShoppingCartViewModel.ListCart)
             {
@@ -130,7 +130,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
                 };
 
                 _unitOfWork.OrderDetailsRepository.Add(orderDetails);
-                await _unitOfWork.Save();
+                _unitOfWork.Save();
             }
 
             if (user.CompanyId.GetValueOrDefault() == 0)
@@ -171,7 +171,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
                 Session session = service.Create(options);
 
                 _unitOfWork.OrderHeaderRepository.UpdateStripeIds(ShoppingCartViewModel.OrderHeader.Id, session.Id, session.PaymentIntentId);
-                await _unitOfWork.Save();
+                _unitOfWork.Save();
 
                 Response.Headers.Add("Location", session.Url);
                 return new StatusCodeResult(303);
@@ -183,7 +183,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
             }
         }
 
-        public async Task<IActionResult> OrderConfirmation(int id)
+        public IActionResult OrderConfirmation(int id)
         {
             var orderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(oh => oh.Id == id);
 
@@ -198,7 +198,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
                 {
                     _unitOfWork.OrderHeaderRepository.UpdateStripeIds(id, orderHeader.SessionId, session.PaymentIntentId);
                     _unitOfWork.OrderHeaderRepository.UpdateStatus(id, StaticDetails.STATUS_APPROVED, StaticDetails.PAYMENT_STATUS_APPROVED);
-                    await _unitOfWork.Save();
+                    _unitOfWork.Save();
                 }
             }
 
@@ -207,21 +207,21 @@ namespace BookshopWeb.Areas.Customer.Controllers
             HttpContext.Session.Clear();
 
             _unitOfWork.ShoppingCartRepository.RemoveRange(shoppingCarts);
-            await _unitOfWork.Save();
+            _unitOfWork.Save();
 
             return View(id);
         }
 
-        public async Task<IActionResult> Plus(int cartId)
+        public IActionResult Plus(int cartId)
         {
             var cart = _unitOfWork.ShoppingCartRepository.GetFirstOrDefault(sc => sc.Id == cartId);
             _unitOfWork.ShoppingCartRepository.IncrementCount(cart, 1);
-            await _unitOfWork.Save();
+            _unitOfWork.Save();
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Minus(int cartId)
+        public IActionResult Minus(int cartId)
         {
             var cart = _unitOfWork.ShoppingCartRepository.GetFirstOrDefault(sc => sc.Id == cartId);
 
@@ -234,16 +234,16 @@ namespace BookshopWeb.Areas.Customer.Controllers
                 _unitOfWork.ShoppingCartRepository.DecrementCount(cart, 1);
             }
 
-            await _unitOfWork.Save();
+            _unitOfWork.Save();
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Remove(int cartId)
+        public IActionResult Remove(int cartId)
         {
             var cart = _unitOfWork.ShoppingCartRepository.GetFirstOrDefault(sc => sc.Id == cartId);
             _unitOfWork.ShoppingCartRepository.Remove(cart);
-            await _unitOfWork.Save();
+            _unitOfWork.Save();
 
             var count = _unitOfWork.ShoppingCartRepository.GetAll(sc => sc.ApplicationUserId == cart.ApplicationUserId).ToList().Count();
             HttpContext.Session.SetInt32(StaticDetails.SESSION_CART, count);
@@ -251,8 +251,11 @@ namespace BookshopWeb.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private static double GetPriceBasedOnQuantity(double quantity, double price)
+        public static double GetPriceBasedOnQuantity(double quantity, double price)
         {
+            if(quantity <= 0 || price <= 0)
+                throw new ArgumentException();
+
             if (quantity <= 50)
                 return price;
 

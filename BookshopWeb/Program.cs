@@ -13,10 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//{
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"),
+//    builder => builder.MigrationsAssembly("Bookshop.DataAccess"));
+//});
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"),
-    builder => builder.MigrationsAssembly("Bookshop.DataAccess"));
+    options.UseSqlite(builder.Configuration.GetConnectionString("SQLite"));
 });
 
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));

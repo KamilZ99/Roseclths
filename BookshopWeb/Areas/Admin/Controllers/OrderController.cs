@@ -34,11 +34,15 @@ namespace BookshopWeb.Areas.Admin.Controllers
 
         public IActionResult Details(int orderId)
         {
-            OrderViewModel = new OrderViewModel()
-            {
-                OrderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(oh => oh.Id == orderId, "ApplicationUser"),
-                OrderDetails = _unitOfWork.OrderDetailsRepository.GetAll(od => od.OrderId == orderId, "Book")
-            };
+            if(_unitOfWork.OrderHeaderRepository.GetFirstOrDefault(oh => oh.Id == orderId) == null)
+                return NotFound();
+
+            if(_unitOfWork.OrderDetailsRepository.GetAll(od => od.OrderId == orderId) == null)
+                return NotFound();
+
+            OrderViewModel = new OrderViewModel();
+            OrderViewModel.OrderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(oh => oh.Id == orderId, "ApplicationUser");
+            OrderViewModel.OrderDetails = _unitOfWork.OrderDetailsRepository.GetAll(od => od.OrderId == orderId, "Book");
 
             return View(OrderViewModel);
         }
@@ -46,7 +50,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
         [HttpPost]
         [ActionName("Details")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Details_Customer()
+        public IActionResult Details_Customer()
         {
             OrderViewModel.OrderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(oh => oh.Id == OrderViewModel.OrderHeader.Id, "ApplicationUser");
             OrderViewModel.OrderDetails = _unitOfWork.OrderDetailsRepository.GetAll(od => od.OrderId == OrderViewModel.OrderHeader.Id, "Book");
@@ -89,17 +93,20 @@ namespace BookshopWeb.Areas.Admin.Controllers
             Session session = service.Create(options);
 
             _unitOfWork.OrderHeaderRepository.UpdateStripeIds(OrderViewModel.OrderHeader.Id, session.Id, session.PaymentIntentId);
-            await _unitOfWork.Save();
+            _unitOfWork.Save();
 
             Response.Headers.Add("Location", session.Url);
             return new StatusCodeResult(303);
         }
 
-        public async Task<IActionResult> PaymentConfirmation(int orderHeaderId)
+        public IActionResult PaymentConfirmation(int orderHeaderId)
         {
             var orderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(oh => oh.Id == orderHeaderId);
 
-            if (orderHeader == null) throw new ArgumentNullException(nameof(orderHeader));
+            if (orderHeader == null)
+            {
+                throw new ArgumentNullException(nameof(orderHeader));
+            }
 
             if (orderHeader.PaymentStatus == StaticDetails.PAYMENT_STATUS_DELAYED_PAYMENT)
             {
@@ -110,7 +117,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
                 {
                     _unitOfWork.OrderHeaderRepository.UpdateStripeIds(orderHeaderId, orderHeader.SessionId, session.PaymentIntentId);
                     _unitOfWork.OrderHeaderRepository.UpdateStatus(orderHeaderId, orderHeader.OrderStatus, StaticDetails.PAYMENT_STATUS_APPROVED);
-                    await _unitOfWork.Save();
+                    _unitOfWork.Save();
                 }
             }
 
@@ -124,7 +131,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
         {
             var dbOrderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(oh => oh.Id == OrderViewModel.OrderHeader.Id);
 
-            if(dbOrderHeader == null) return NotFound("Cannot find this order in database.");
+            if(dbOrderHeader == null) return NotFound("Cannot find the order in the database.");
 
             dbOrderHeader.Name = OrderViewModel.OrderHeader.Name;
             dbOrderHeader.PhoneNumber = OrderViewModel.OrderHeader.PhoneNumber;
@@ -167,22 +174,21 @@ namespace BookshopWeb.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ShipOrder()
         {
-            var orderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(oh => oh.Id == OrderViewModel.OrderHeader.Id);
+            var dbOrderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(header => header.Id == OrderViewModel.OrderHeader.Id);
 
-            if(orderHeader == null) return NotFound("Cannot find this order in database.");
+            dbOrderHeader.TrackingNumber = OrderViewModel.OrderHeader.TrackingNumber;
+            dbOrderHeader.Carrier = OrderViewModel.OrderHeader.Carrier;
+            dbOrderHeader.OrderStatus = StaticDetails.STATUS_SHIPPED;
+            dbOrderHeader.ShippingDate = DateTime.Now;
 
-            orderHeader.TrackingNumber = OrderViewModel.OrderHeader.TrackingNumber;
-            orderHeader.Carrier = OrderViewModel.OrderHeader.Carrier;
-            orderHeader.OrderStatus = StaticDetails.STATUS_SHIPPED;
-            orderHeader.ShippingDate = DateTime.Now;
-
-            if (orderHeader.PaymentStatus == StaticDetails.PAYMENT_STATUS_DELAYED_PAYMENT)
+            if (dbOrderHeader.PaymentStatus == StaticDetails.PAYMENT_STATUS_DELAYED_PAYMENT)
             {
-                orderHeader.PaymentDueDate = DateTime.Now.AddDays(30);
+                dbOrderHeader.PaymentDueDate = DateTime.Now.AddDays(30);
             }
 
-            _unitOfWork.OrderHeaderRepository.Update(orderHeader);
+            _unitOfWork.OrderHeaderRepository.Update(dbOrderHeader);
             _unitOfWork.Save();
+
             TempData["success"] = "Order shipped succesfully.";
             return RedirectToAction("Details", "Order", new { orderId = OrderViewModel.OrderHeader.Id });
         }
@@ -222,7 +228,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
         #region API
 
         [HttpGet]
-        public IActionResult GetAll(string status)
+        public IActionResult GetAll()
         {
             IEnumerable<OrderHeader> orderHeaders;
 
@@ -239,29 +245,34 @@ namespace BookshopWeb.Areas.Admin.Controllers
                 orderHeaders = _unitOfWork.OrderHeaderRepository.GetAll(oh => oh.ApplicationUserId == idClaim.Value, "ApplicationUser");
             }
 
-            switch (status)
+            return Json(new { data = orderHeaders });
+        }
+
+        [Authorize(Roles = $"{StaticDetails.ROLE_ADMIN},{StaticDetails.ROLE_EMPLOYEE}")]
+        public IActionResult Delete(int? id)
+        {
+            if (id is null || id == 0)
             {
-                case "inprocess":
-                    orderHeaders = orderHeaders.Where(oh => oh.OrderStatus == StaticDetails.STATUS_IN_PROCESS);
-                    break;
-
-                case "pending":
-                    orderHeaders = orderHeaders.Where(oh => oh.PaymentStatus == StaticDetails.PAYMENT_STATUS_PENDING);
-                    break;
-
-                case "completed":
-                    orderHeaders = orderHeaders.Where(oh => oh.OrderStatus == StaticDetails.STATUS_SHIPPED );
-                    break;
-
-                case "approved":
-                    orderHeaders = orderHeaders.Where(oh => oh.OrderStatus == StaticDetails.STATUS_APPROVED );
-                    break;
-
-                default:
-                    break;
+                TempData["error"] = "An unexpected error occured while deleting an order.";
+                return RedirectToAction("Index");
             }
 
-            return Json(new { data = orderHeaders });
+            var orderDetails = _unitOfWork.OrderDetailsRepository.GetFirstOrDefault(c => c.OrderId == id);
+            var orderHeader = _unitOfWork.OrderHeaderRepository.GetFirstOrDefault(oh => oh.Id == id);
+
+            if (orderDetails == null || orderHeader == null)
+            {
+                TempData["error"] = "An unexpected error occured while deleting an order.";
+                return RedirectToAction("Index");
+            }
+
+            _unitOfWork.OrderDetailsRepository.Remove(orderDetails);
+            _unitOfWork.OrderHeaderRepository.Remove(orderHeader);
+
+            _unitOfWork.Save();
+
+            TempData["success"] = "Order deleted successfully.";
+            return RedirectToAction("Index");
         }
 
         #endregion

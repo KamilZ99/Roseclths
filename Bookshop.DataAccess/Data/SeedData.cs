@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using System;
 using Bookshop.Utility;
-using BookshopWeb.Migrations;
 
 namespace Bookshop.Models
 {
@@ -21,6 +20,7 @@ namespace Bookshop.Models
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
             context.Database.Migrate();
+            
 
             #region Categories
 

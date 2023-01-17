@@ -30,12 +30,12 @@ namespace BookshopWeb.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Category category)
+        public IActionResult Create(Category category)
         {
             if (ModelState.IsValid)
             {
                 _unitOfWork.CategoryRepository.Add(category);
-                await _unitOfWork.Save();
+                _unitOfWork.Save();
                 TempData["success"] = "Category created successfully.";
                 return RedirectToAction("Index");
             }
@@ -57,12 +57,12 @@ namespace BookshopWeb.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Category category)
+        public IActionResult Edit(Category category)
         {
             if (ModelState.IsValid)
             {
                 _unitOfWork.CategoryRepository.Update(category);
-                await _unitOfWork.Save();
+                _unitOfWork.Save();
                 TempData["success"] = "Category updated successfully.";
                 return RedirectToAction("Index");
             }
@@ -71,7 +71,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
 
         [HttpDelete]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id is null || id == 0)
             {
@@ -88,7 +88,7 @@ namespace BookshopWeb.Areas.Admin.Controllers
             }
 
             _unitOfWork.CategoryRepository.Remove(category);
-            await _unitOfWork.Save();
+            _unitOfWork.Save();
             TempData["success"] = "Category deleted successfully.";
             return RedirectToAction("Index");
         }

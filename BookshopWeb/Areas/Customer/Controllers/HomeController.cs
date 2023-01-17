@@ -32,7 +32,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
         [HttpGet]
         public IActionResult Details(int bookId)
         {
-            var book = _unitOfWork.BookRepository.GetFirstOrDefault(b => b.Id == bookId);
+            var book = _unitOfWork.BookRepository.GetFirstOrDefault(b => b.Id == bookId, "CoverType,Category");
 
             if (book == null)
             {
@@ -48,7 +48,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Details(ShoppingCart cart)
+        public IActionResult Details(ShoppingCart cart)
         {
             var claims = User.Identity as ClaimsIdentity;
             var idClaim = claims?.FindFirst(ClaimTypes.NameIdentifier);
@@ -61,7 +61,7 @@ namespace BookshopWeb.Areas.Customer.Controllers
             if (dbCart == null)
             {
                 _unitOfWork.ShoppingCartRepository.Add(cart);
-                await _unitOfWork.Save();
+                _unitOfWork.Save();
                 var count = _unitOfWork.ShoppingCartRepository.GetAll(sc => sc.ApplicationUserId == idClaim.Value).ToList().Count();
                 HttpContext.Session.SetInt32(StaticDetails.SESSION_CART, count);
             }

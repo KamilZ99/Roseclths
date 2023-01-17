@@ -16,6 +16,6 @@ namespace Bookshop.DataAccess.Repository.Interfaces
         IApplicationUserRepository ApplicationUserRepository { get; }
         IOrderHeaderRepository OrderHeaderRepository { get; }
         IOrderDetailsRepository OrderDetailsRepository { get; }
-        Task Save();
+        void Save();
     }
 }

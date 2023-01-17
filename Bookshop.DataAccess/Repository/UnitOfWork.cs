@@ -29,9 +29,9 @@ namespace Bookshop.DataAccess.Repository
         public IOrderHeaderRepository OrderHeaderRepository { get; set; }
         public IOrderDetailsRepository OrderDetailsRepository { get; set; }
 
-        public async Task Save()
+        public void Save()
         {
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
     }
 }
