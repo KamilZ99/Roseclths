@@ -1,0 +1,45 @@
+﻿@model ShoppingCart
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<form method="post">
+    <input type="hidden" asp-for="ProductId" />
+    <input type="hidden" asp-for="Count" />
+    <div class="row">
+        <div class="col-12 mt-4">
+            <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="link-warning text-decoration-none"><i class="bi bi-arrow-left-circle me-2"></i> Go back</a>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-6">
+            <img class="w-75" src="@Model.Product.ImageUrl" alt="@Model.Product.Name image" title="@Model.Product.Name" />
+        </div>
+
+        <div class="col-6">
+            <h1 class="text-warning fs-2">@Model.Product.Name</h1>
+                
+            <div class="col-12">
+                <div class="btn btn-primary">@Model.Product.Type.Name</div>
+                <div class="btn btn-warning ms-2">@Model.Product.Material.Name</div>
+            </div>
+                
+            <div class="col-12 mt-4">
+                <p>@Model.Product.Description</p>
+            </div>
+
+            <div class="col-12 my-4">
+                <p class="card-subtitle text-light fs-6"><b><strike>@Model.Product.ListPrice.ToString("c")</strike></b></p>
+                <p class="card-subtitle text-warning fs-5">Current price: <b>@Model.Product.Price.ToString("c")</b></p>
+            </div>
+
+            <div class="col-12 mt-5 text-end">
+                <button class="btn btn-lg btn-success rounded-0 mx-1">Add to cart</button>
+            </div>
+        </div>
+                
+    </div>
+
+</form>

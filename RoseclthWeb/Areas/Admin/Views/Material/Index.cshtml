@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Material>
+
+@{
+    ViewData["Title"] = "Material";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="container p-3">
+    <div class="row py-4">
+        <div class="col-6">
+            <h2 class="display-6 text-white">Materials</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Material" asp-action="Create" class="btn btn-success mt-2 me-1">Create new</a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-default table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Material name</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var material in Model)
+                    {
+                        <tr>
+                            <td width="50%" class="align-middle">@material.Name</td>
+                            <td width="50%" class="text-center">
+                                <div class="btn-group" role="group">
+                                    <a asp-controller="Material" asp-action="Edit" asp-route-id="@material.Id" class="btn btn-warning ms-1" title="Edit"><i class="bi bi-pencil-square"></i></a>
+                                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-@material.Id" title="Delete"><i class="bi bi-trash-fill"></i></a>
+                                </div>
+                                <div class="modal fade" id="exampleModal-@material.Id" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Delete material</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-start">
+                                                Are you sure you want to remove @material.Name?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <a onclick="deleteRequest('/Delete/@material.Id')" class="btn btn-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

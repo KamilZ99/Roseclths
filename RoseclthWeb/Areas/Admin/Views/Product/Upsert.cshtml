@@ -1,0 +1,161 @@
+﻿@model ProductViewModel
+
+@{
+    ViewData["Title"] = Model.Product.Id != 0 ? "Update product" : "Create product";
+}
+<div class="container">
+    <div class="row justify-content-center border p-3 mt-4 mx-auto">
+        <form method="post" asp-action="Upsert" enctype="multipart/form-data">
+
+            <div class="row">
+                <h2 class="text-white">@(Model.Product.Id != 0 ? "Update the product" : "Create a new product")</h2>
+                <hr />
+            </div>
+
+            <div class="row justify-content-center mb-4">
+                <div class="col-8">
+                    <input hidden type="hidden" asp-for="Product.Id" />
+                    <input hidden type="hidden" asp-for="Product.ImageUrl" />
+                    <label asp-for="Product.Name"></label>
+                    <input asp-for="Product.Name" class="form-control" />
+                    <span asp-validation-for="Product.Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-4">
+                <div class="col-8">
+                    <label asp-for="Product.Description"></label>
+                    <textarea class="form-control" asp-for="Product.Description" rows="5"></textarea>
+                    <span asp-validation-for="Product.Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-4">
+                <div class="col-8">
+                    <label asp-for="Product.Brand"></label>
+                    <input asp-for="Product.Brand" class="form-control" />
+                    <span asp-validation-for="Product.Brand" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-4">
+                <div class="col-8">
+                    <label asp-for="Product.ImageUrl"></label>
+                    <input type="file" asp-for="Product.Image" id="file" accept="image/*" class="form-control" onchange="preview()" />
+                    <div id="imagePreview" class="mt-4">
+                        @if(Model.Product.ImageUrl != null)
+                        {
+                            <img width="100%" src="@Model.Product.ImageUrl" alt="Product cover" />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mb-4">
+                <div class="col-4">
+                    <label asp-for="Product.Price"></label>
+                    <input asp-for="Product.Price" class="form-control" />
+                    <span asp-validation-for="Product.Price" class="text-danger"></span>
+                </div>
+                <div class="col-4">
+                    <label asp-for="Product.ListPrice"></label>
+                    <input asp-for="Product.ListPrice" class="form-control" />
+                    <span asp-validation-for="Product.ListPrice" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row justify-content-center mb-4">
+                <div class="col-4">
+                    <label asp-for="Product.TypeId"></label>
+                    <select asp-for="Product.TypeId" asp-items="@Model.TypeList" class="form-select">
+                        <option disabled selected>Select type</option>
+                    </select>
+                    <span asp-validation-for="Product.TypeId" class="text-danger"></span>
+                </div>
+                <div class="col-4">
+                    <label asp-for="Product.MaterialId"></label>
+                    <select asp-for="Product.MaterialId" asp-items="@Model.MaterialList" class="form-select">
+                        <option disabled selected>Select material</option>
+                    </select>
+                    <span asp-validation-for="Product.MaterialId" class="text-danger"></span>
+                </div>
+            </div>
+
+            @if(Model.Product.Id != 0)
+            {
+                <button type="submit" class="btn btn-success">Save</button>
+            }
+            else
+            {
+                <button type="submit" onclick="return validateInput()" class="btn btn-success">Create</button>
+            }
+
+            <a asp-controller="Product" asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts
+    {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+    <script type="text/javascript">
+        function validateInput() {
+
+            const fileInput = document.getElementById('file');
+            const filePath = fileInput.value;
+
+            if (filePath == '') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Please upload an image of your product cover.',
+                });
+                return false;
+            }
+
+            return true;
+        }
+
+        function preview() {
+            const fileInput = document.getElementById('file');
+
+            const filePath = fileInput.value;
+
+            if (filePath == '') {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Please upload an image of your product cover.',
+                });
+                document.getElementById('imagePreview').innerHTML = '';
+                return false;
+            }
+
+            const allowedExtensions = /(\.tiff|\.jfif|\.bmp|\.pjp|\.apng|\.gif|\.svg|\.png|\.xbm|\.dib|\.jxl|\.jpeg|\.svgz|\.jpg|\.webp|\.ico|\.tif|\.pjpeg|\.avif)$/i;
+
+            if (allowedExtensions.exec(filePath) && fileInput.files && fileInput.files[0]) {
+                
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('imagePreview').innerHTML =
+                        '<img width="100%" src="' + e.target.result + '" alt="Product image" />';
+                };
+
+                reader.readAsDataURL(fileInput.files[0]);
+                return true;
+            } else {
+                fileInput.value = '';
+                document.getElementById('imagePreview').innerHTML = '';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'This file extension is not supported.',
+                });
+                return false;
+            }
+
+        }
+    </script>
+}
+

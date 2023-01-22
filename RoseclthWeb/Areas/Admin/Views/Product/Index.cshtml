@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Products";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="container p-3">
+    <div class="row py-4">
+        <div class="col-6">
+            <h2 class="display-6 text-white">Products</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Product" asp-action="Upsert" class="btn btn-success mt-2 me-1">Create new</a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <table id="dataTable" class="table table-default table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Brand</th>
+                        <th>List Price</th>
+                        <th>Type</th>
+                        <th>Material</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/product.js"></script>
+}

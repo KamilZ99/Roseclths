@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Roseclth.Models.Type>
+
+@{
+    ViewData["Title"] = "Types";
+}
+
+@Html.AntiForgeryToken()
+
+<div class="container p-3">
+    <div class="row py-4">
+        <div class="col-6">
+            <h2 class="display-6 text-white">Type List</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Type" asp-action="Create" class="btn btn-success mt-2 me-1">Create new</a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-default table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Type Name</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var type in Model)
+                    {
+                        <tr>
+                            <td class="align-middle">@type.Name</td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <a asp-controller="Type" asp-action="Edit" asp-route-id="@type.Id" class="btn btn-warning ms-1" title="Edit"><i class="bi bi-pencil-square"></i></a>
+                                    <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-@type.Id" title="Delete"><i class="bi bi-trash-fill"></i></a>
+                                </div>
+                                <div class="modal fade" id="exampleModal-@type.Id" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Delete type</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body text-start">
+                                                Are you sure you want to remove @type.Name?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <a onclick="deleteRequest('/Delete/@type.Id')" class="btn btn-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
