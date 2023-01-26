@@ -102,7 +102,7 @@ and can check the status of their order in the 'Orders' tab.
 After clicking the "Buy Now!" button, the order is confirmed. The user is redirected to the page: https://localhost:7046/Item.
 The item can be found in the My Orders tab at the address: https://localhost:7046/Order
 
-![My orders](/img/myorders.PNG)
+![My orders](/img/myorder.PNG)
 
 
 ### Admin Panel
