@@ -1,3 +1,5 @@
+![Roseclth](/img/rosecltth.png)
+
 # Roseclth
 
 Web shop application build with ASP.NET CORE MVC, Entity Framework Core, and SQLite.
@@ -61,27 +63,27 @@ We can run unit tests in two ways:
 ## Registration
 
 Any user can access the page https://localhost:7009/Identity/Account/Register where the registration form is displayed
-![Register Form](/register.png)
+![Register Form](/img/register.PNG)
 
 ## Login
 Any user can access the login page: https://localhost:7009/Identity/Account/Login, where an email and password must be provided.
 
-![Login Form](/login.png)
+![Login Form](/img/login.PNG)
 
 After submitting the form, if the login data is correct, the user is redirected to the address: https://localhost:7009/ where the application's welcome page is located.
 
 ## Adding a product
 An administrator account has the function of adding products to the store at the address https://localhost:7009/Admin/Product
 
-![Product Add form](/additem.png)
+![Product Add form](/img/additem.PNG)
 
 ## Editing a product
 An administrator account has the function of editing products https://localhost:7009/Admin/Product/Upsert?id=6 (editing an example product with id=6)
-![Edit product form](/edititem.png)
+![Edit product form](/img/edititem.PNG)
 
 ## Buying a product
 Buying is available for logged-in users after adding products to the cart and clicking the "checkout" button, we will be transferred to the finalizing order page https://localhost:7009/Customer/Cart/Summary
-![Buying product](/checkout.png)
+![Buying product](/img/checkout.PNG)
 
 After filling in the address details and clicking the 'Place Order' button, the user is transferred to the 'stripe' page where the order is finalized and paid
 
@@ -94,13 +96,13 @@ Date : Any future date
 After paying for the order, the following message is displayed and the user is redirected to the page (for id = 13) https://localhost:7009/customer/cart/OrderConfirmation?id=13
 and can check the status of their order in the 'Orders' tab.
 
-![Final order](/orderstripe.png)
-![Order status](/orderlist.png)
+![Final order](/img/orderstripe.PNG)
+![Order status](/img/orderlist.PNG)
 
 After clicking the "Buy Now!" button, the order is confirmed. The user is redirected to the page: https://localhost:7046/Item.
 The item can be found in the My Orders tab at the address: https://localhost:7046/Order
 
-![My orders](/myorders.PNG)
+![My orders](/img/myorders.PNG)
 
 
 ### Admin Panel
@@ -113,13 +115,13 @@ To manage the admin panel, you should:
 
 Example of using the "Materials" tab is located at the address https://localhost:7009/Admin/Material
 Example view of Materials:
-![Materials View](/materials.PNG)
+![Materials View](/img/materials.PNG)
 
 Access to the admin panel is only available to users with an account on the site with administrator permissions.
 To use the panel, you should use the "Admin" tab located at the address: https://localhost:7046/Admin.
 To register new company / employee / admin user we need to use admin panel and create user with role that we can choose from the dropdown.
 
-![Admin panel](/admin.PNG)
+![Admin panel](/img/admin.PNG)
 
 ## Built With
 
