@@ -100,17 +100,96 @@ namespace Roseclth.Models
                 {
                     new Product()
                     {
-                        Name = "aBiBas t-shirt",
-                        Description = "description max 500 characters",
-                        Brand = "Abibas",
-                        ImageUrl = "\\img\\products\\abibas.jpg",
-                        Price = 39.99,
-                        ListPrice = 49.99,
+                        Name = "HOODIE SPIERDER DISSARAY",
+                        Description = "Topowy na Polskim rynku materiał premium 90% bawełna, 10% poliester, 320 g/m² -Przyjemna dzianina pętelkowa w środku -Brak cech mechacenia, gniecenia, obchodzenia -Nadruk wykonany z mieniących się w świetle kryształków -W 100% wyprodukowana w Polsce",
+                        Brand = "DISSARAY",
+                        ImageUrl = "\\img\\products\\1c4fed57-c4ed-40ae-8649-7fabd7be7af8.jpg",
+                        Price = 199.99,
+                        ListPrice = 239.99,
+                        TypeId = context.Types.First(x => x.Name == "Hoodie").Id,
+                        MaterialId = context.Materials.First(x => x.Name == "Cotton").Id
+                    },
+                    new Product()
+                    {
+                        Name = "HOODIE OVERSIZE DISSARAY",
+                        Description = "Topowy na Polskim rynku materiał premium 90% bawełna, 10% poliester, 320 g/m² -Przyjemna dzianina pętelkowa w środku -Brak cech mechacenia, gniecenia, obchodzenia -Nadruk wykonany z mieniących się w świetle kryształków -W 100% wyprodukowana w Polsce",
+                        Brand = "DISSARAY",
+                        ImageUrl = "\\img\\products\\5e7d3f04-8a72-45d0-9f4d-5202f8a09cbf.jpg",
+                        Price = 179.99,
+                        ListPrice = 199.99,
+                        TypeId = context.Types.First(x => x.Name == "Hoodie").Id,
+                        MaterialId = context.Materials.First(x => x.Name == "Cotton").Id
+                    },
+                    new Product()
+                    {
+                        Name = "T-SHIRT OVERSIZE DISSARAY SPIDER",
+                        Description = "-Krój BOXY -Wysokiej jakości gruba i przyjemna w dotyku bawełna 100%, 300 g/m² -Nadruk wykonany z mieniących się w świetle kryształków",
+                        Brand = "DISSARAY",
+                        ImageUrl = "\\img\\products\\7345ed4d-7ed1-47b7-92e3-aab6fb6464e5.jpg",
+                        Price = 79.99,
+                        ListPrice = 99.99,
                         TypeId = context.Types.First(x => x.Name == "T-Shirt").Id,
                         MaterialId = context.Materials.First(x => x.Name == "Cotton").Id
                     },
+                        new Product()
+                    {
+                        Name = "T-SHIRT OVERSIZE DISSARAY",
+                        Description = "-Krój BOXY -Wysokiej jakości gruba i przyjemna w dotyku bawełna 100%, 300 g/m² -Nadruk wykonany z mieniących się w świetle kryształków",
+                        Brand = "DISSARAY",
+                        ImageUrl = "\\img\\products\\58ad87da-760f-428a-984f-a84d8bba6610.jpg",
+                        Price = 79.99,
+                        ListPrice = 99.99,
+                        TypeId = context.Types.First(x => x.Name == "T-Shirt").Id,
+                        MaterialId = context.Materials.First(x => x.Name == "Cotton").Id
+                    },
+                           new Product()
+                    {
+                        Name = "BEANIE DISSARAY",
+                        Description = "Czapka zimowa 100% przędza akrylowa Haftowane logo z przodu",
+                        Brand = "DISSARAY",
+                        ImageUrl = "\\img\\products\\fb72653f-b52d-41cc-a245-1d42d12eb3a9.jpg",
+                        Price = 39.00,
+                        ListPrice = 49.00,
+                        TypeId = context.Types.First(x => x.Name == "Cap").Id,
+                        MaterialId = context.Materials.First(x => x.Name == "Cotton").Id
+                    },
+                              new Product()
+                    {
+                        Name = "HOODIE MEDUSA SERUM",
+                        Description = "Najwyższej jakości 100% bawełna, gramatura 340g/m2. Na przodzie trwały nadruk sitodrukiem oraz gęsty haft. Metalowy rozpinany zamek.",
+                        Brand = "SERUM",
+                        ImageUrl = "\\img\\products\\076beaae-eca6-46fb-bb56-d141f9033bb9.jpg",
+                        Price = 299.00,
+                        ListPrice = 329.00,
+                        TypeId = context.Types.First(x => x.Name == "Hoodie").Id,
+                        MaterialId = context.Materials.First(x => x.Name == "Wool").Id
+                    },
+
+                                new Product()
+                    {
+                        Name = "SERUM DOBERMAN HOODIE",
+                        Description = "Najwyższej jakości 100% bawełna, gramatura 340g/m2. Na przodzie trwały nadruk sitodrukiem oraz gęsty haft. Metalowy rozpinany zamek.",
+                        Brand = "SERUM",
+                        ImageUrl = "\\img\\products\\656d9e54-b2f8-4014-9f0d-fcf6657459ae.jpg",
+                        Price = 299.00,
+                        ListPrice = 329.00,
+                        TypeId = context.Types.First(x => x.Name == "Hoodie").Id,
+                        MaterialId = context.Materials.First(x => x.Name == "Wool").Id
+                    },
+                                   new Product()
+                    {
+                        Name = "HOODIE OVERSIZE SERUM",
+                        Description = "Najwyższej jakości 100% bawełna, gramatura 340g/m2. Na przodzie trwały nadruk sitodrukiem oraz gęsty haft. Metalowy rozpinany zamek.",
+                        Brand = "SERUM",
+                        ImageUrl = "\\img\\products\\db770d83-a2c9-4427-a52d-4800f9371c30.jpg",
+                        Price = 199.00,
+                        ListPrice = 239.00,
+                        TypeId = context.Types.First(x => x.Name == "Hoodie").Id,
+                        MaterialId = context.Materials.First(x => x.Name == "Wool").Id
+                    },
+
                 };
-                
+
                 await context.Products.AddRangeAsync(products);
                 await context.SaveChangesAsync();
             }
